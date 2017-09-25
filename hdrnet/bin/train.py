@@ -110,9 +110,20 @@ def main(args, model_params, data_params):
     update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
     updates = tf.group(*update_ops, name='update_ops')
     log.info("Adding {} update ops".format(len(update_ops)))
+
+    reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+    if reg_losses and args.weight_decay is not None and args.weight_decay > 0:
+      print "Regularization losses:"
+      for rl in reg_losses:
+        print " ", rl.name
+      opt_loss = loss + args.weight_decay*sum(reg_losses)
+    else:
+      print "No regularization."
+      opt_loss = loss
+
     with tf.control_dependencies([updates]):
       opt = tf.train.AdamOptimizer(args.learning_rate)
-      minimize = opt.minimize(loss, name='optimizer', global_step=global_step)
+      minimize = opt.minimize(opt_loss, name='optimizer', global_step=global_step)
 
   # Average loss and psnr for display
   with tf.name_scope("moving_averages"):
@@ -197,6 +208,7 @@ if __name__ == '__main__':
   # Training, logging and checkpointing parameters
   train_grp = parser.add_argument_group('training')
   train_grp.add_argument('--learning_rate', default=1e-4, type=float, help='learning rate for the stochastic gradient update.')
+  train_grp.add_argument('--weight_decay', default=None, type=float, help='l2 weight decay on FC and Conv layers.')
   train_grp.add_argument('--log_interval', type=int, default=1, help='interval between log messages (in s).')
   train_grp.add_argument('--summary_interval', type=int, default=120, help='interval between tensorboard summaries (in s)')
   train_grp.add_argument('--checkpoint_interval', type=int, default=600, help='interval between model checkpoints (in s)')
