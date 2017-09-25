@@ -10,7 +10,7 @@ tensorflow
 WORKSPACE
 tb_*
 old_scripts
-pretrained_models
+pretrained_models/**
 
 !pretrained_models/download.py
 !pretrained_models/local_laplacian_sample
