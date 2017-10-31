@@ -446,8 +446,7 @@ class RecordReader(object):
         self._fnames,
         capacity=1000,
         shuffle=shuffle,
-        num_epochs=num_epochs,
-        shared_name='input_files')
+        num_epochs=num_epochs)
     self._reader = tf.TFRecordReader()
 
     # Read first record to initialize the shape parameters
