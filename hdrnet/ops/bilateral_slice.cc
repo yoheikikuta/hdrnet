@@ -350,9 +350,18 @@ class BilateralSliceApplyGradOp : public OpKernel {
       OP_REQUIRES_OK(context, context->allocate_output(2, input_shape,
             &input_grad));
 
-      const int64 *grid_size = bilateral_grid.shape().dim_sizes().data();
-      const int64 *guide_size = guide.shape().dim_sizes().data();
-      const int64 *input_size = input.shape().dim_sizes().data();
+      int64 grid_size[5]{bilateral_grid.dim_size(0),
+        bilateral_grid.dim_size(1),
+        bilateral_grid.dim_size(2),
+        bilateral_grid.dim_size(3),
+        bilateral_grid.dim_size(4)};
+      int64 guide_size[3]{guide.dim_size(0),
+        guide.dim_size(1),
+        guide.dim_size(2)};
+      int64 input_size[4]{input.dim_size(0),
+        input.dim_size(1),
+        input.dim_size(2),
+        input.dim_size(3)};
 
       auto grid_grad_array = grid_grad->template flat<float>();
       auto guide_grad_array = guide_grad->template flat<float>();
