@@ -14,6 +14,7 @@
 # limitations under the License.
 
 """Train a model."""
+import sys; sys.path.append("../")
 
 import argparse
 import logging
