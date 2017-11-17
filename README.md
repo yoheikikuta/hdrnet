@@ -21,10 +21,10 @@ This is not an official Google product.
 
 ### Dependencies
 
-To install the Python dependencies, run:
+Requirement: nvidia-docker environment
 
-    cd hdrnet
-    pip install -r requirements.txt
+    docker build -t [tag] -f ./Dockerfile .
+    nvidia-docker run -it -v $PWD:/work --name [conainer name] [tag]
 
 ### Build
 
@@ -34,7 +34,7 @@ To build it, run:
     cd hdrnet
     make
 
-To build the benchmarking code, run:
+~To build the benchmarking code, run:~ (cannot be done successfully this step yet)
 
     cd benchmark
     make
@@ -64,7 +64,8 @@ run:
 
 To train a model, run the following command:
 
-    ./hdrnet/bin/train.py <checkpoint_dir> <path/to_training_data/filelist.txt>
+    cd hdrnet
+    ./bin/train.py <checkpoint_dir> <path/to_training_data/filelist.txt>
 
 Look at `sample_data/identity/` for a typical structure of the training data folder.
 
